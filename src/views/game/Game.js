@@ -9,7 +9,9 @@ class Game extends Component {
     this.state = {
       dogPosition: 1, // (狗狗的位置，默认在1中间 0左边 2右边)
       pisitionName: 'center',
-      index: 1 // 狗狗的帧动画
+      index: 1, // 狗狗的帧动画,
+      top: 0, // 背景高度
+      img: null
     }
     this.drawBg = this.drawBg.bind(this)
     this.drawDog = this.drawDog.bind(this)
@@ -18,8 +20,15 @@ class Game extends Component {
   }
 
   componentDidMount() {
-    this.drawBg()
-    this.drawDog()
+    // this.drawBg()
+    // this.drawDog()
+    let img = new Image()
+    img.src = require('./img/game_bg_top.png')
+    img.onload = () => {
+      this.setState({ img: img })
+      requestAnimationFrame(this.drawBg)
+    }
+
     requestAnimationFrame(t => this.drawDog(t, 0))
   }
 
@@ -55,9 +64,14 @@ class Game extends Component {
   }
 
   // 画背景
-  drawBg() {
+  // timestamp: 时间戳 elapsed: 已经过去的时间
+
+  drawBg(timestamp = 0, elapsed = 1000 / 1 + 1) {
     let surfaceWidth = window.innerWidth;
     let surfaceHeight = window.innerHeight;
+    let top = this.state.top;
+    let lay = elapsed;
+    let img = this.state.img;
 
     let bgC = this.refs.canvasRef
     bgC.width = surfaceWidth
@@ -71,27 +85,27 @@ class Game extends Component {
     let bgCtx2 = bgC2.getContext("2d")
 
 
-    let img = new Image()
-    let top = 0
-    let timer = null
-    clearInterval(timer)
-    timer = setInterval(() => {
-      // this.clea(bgCtx, surfaceWidth, surfaceHeight)
-      // this.clea(bgCtx2, surfaceWidth, surfaceHeight)
-      img.src = require('./img/game_bg_top.png')
-      img.onload = function () {
-        bgCtx.drawImage(img, 0, top, surfaceWidth, surfaceHeight)
-        bgCtx2.drawImage(img, 0, -(surfaceHeight - top), surfaceWidth, surfaceHeight)
-      }
-      top++
+    // let img = new Image()
+    // timer = setInterval(() => {
+    // img.src = require('./img/game_bg_top.png')
+    if (lay > 1000 / 61) {
       if (top >= surfaceHeight) {
-        top = 0
+        this.setState({ top: 0 })
       }
-    }, 20)
+      console.log(img)
+      this.clear(bgCtx, surfaceWidth, surfaceHeight)
+      this.clear(bgCtx2, surfaceWidth, surfaceHeight)
+      // bgCtx.fillStyle = '#000';
+      // bgCtx.fillRect(0, 0, surfaceWidth, surfaceHeight)
+      bgCtx.drawImage(img, 0, top, surfaceWidth, surfaceHeight)
+      bgCtx2.drawImage(img, 0, -(surfaceHeight - top), surfaceWidth, surfaceHeight)
+      top++;
+      lay = 0;
+      this.setState({ top: top })
+    }
+    requestAnimationFrame(t => this.drawBg(t, lay + t - timestamp))
 
     // this.clea(bgCtx, surfaceWidth, surfaceHeight)
-    // bgCtx.fillStyle = '#eeeeff';
-    // bgCtx.fillRect(0, 0, surfaceWidth, surfaceHeight)
   }
 
   // 画狗
@@ -103,7 +117,6 @@ class Game extends Component {
     let img = new Image();
     let index = this.state.index;
     let nowI = this.state.index % 6;
-    console.log(lay);
     // 帧动画结束回到初始化状态
     if (lay > 1000 / 6) {
       lay = 0;
@@ -111,9 +124,7 @@ class Game extends Component {
       this.setState({ index: index })
     }
     if (this.state.index === 6) this.state.index = 1;
-    console.log(nowI)
     img.src = require('./img/dog/' + nowI + '.png')
-    console.log('./img/dog/' + nowI + '.png')
     // 绘图
     img.onload = () => {
       this.clear(ctx, 75, 100)
