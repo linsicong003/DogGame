@@ -1,2 +1,3 @@
-# DogGame
-A game about puppy dog
+#A puppy game
+
+### This is a simple game about puppy dog.
