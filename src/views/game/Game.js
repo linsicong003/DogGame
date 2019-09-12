@@ -23,7 +23,7 @@ class Game extends Component {
     // this.drawBg()
     // this.drawDog()
     let img = new Image()
-    img.src = require('./img/game_bg_top.png')
+    img.src = require('./img/game_bg_bottom.png')
     img.onload = () => {
       this.setState({ img: img })
       requestAnimationFrame(this.drawBg)
@@ -65,7 +65,6 @@ class Game extends Component {
 
   // 画背景
   // timestamp: 时间戳 elapsed: 已经过去的时间
-
   drawBg(timestamp = 0, elapsed = 1000 / 1 + 1) {
     let surfaceWidth = window.innerWidth;
     let surfaceHeight = window.innerHeight;
@@ -90,17 +89,18 @@ class Game extends Component {
     // img.src = require('./img/game_bg_top.png')
     if (lay > 1000 / 61) {
       if (top >= surfaceHeight) {
+        top = 0;
         this.setState({ top: 0 })
       }
-      console.log(img)
       this.clear(bgCtx, surfaceWidth, surfaceHeight)
       this.clear(bgCtx2, surfaceWidth, surfaceHeight)
-      // bgCtx.fillStyle = '#000';
-      // bgCtx.fillRect(0, 0, surfaceWidth, surfaceHeight)
+      bgCtx.fillStyle = '#000';
+      bgCtx.fillRect(0, 0, surfaceWidth, surfaceHeight)
       bgCtx.drawImage(img, 0, top, surfaceWidth, surfaceHeight)
       bgCtx2.drawImage(img, 0, -(surfaceHeight - top), surfaceWidth, surfaceHeight)
       top++;
       lay = 0;
+      console.log(top)
       this.setState({ top: top })
     }
     requestAnimationFrame(t => this.drawBg(t, lay + t - timestamp))
