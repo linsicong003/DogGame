@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import bgImg from './img/game_bg_top.png';
+import lovers from './img/lovers1.png';
 
 require('./css/game.css')
 
@@ -89,6 +90,7 @@ class Game extends Component {
     // img.src = require('./img/game_bg_top.png')
     if (lay > 1000 / 61) {
       if (top >= surfaceHeight) {
+        // 这里清空这一屏幕的障碍物
         top = 0;
         this.setState({ top: 0 })
       }
@@ -98,9 +100,11 @@ class Game extends Component {
       bgCtx.fillRect(0, 0, surfaceWidth, surfaceHeight)
       bgCtx.drawImage(img, 0, top, surfaceWidth, surfaceHeight)
       bgCtx2.drawImage(img, 0, -(surfaceHeight - top), surfaceWidth, surfaceHeight)
+      // 要在背景之后画障碍物--不然会被盖掉
+      this.drawObstacle(bgCtx, top, 50)
+      // this.drawObstacle(bgCtx2, -(surfaceHeight - top), 50)
       top++;
       lay = 0;
-      console.log(top)
       this.setState({ top: top })
     }
     requestAnimationFrame(t => this.drawBg(t, lay + t - timestamp))
@@ -130,6 +134,17 @@ class Game extends Component {
       this.clear(ctx, 75, 100)
       ctx.drawImage(img, 0, 0, 75, 100)
       requestAnimationFrame(t => this.drawDog(t, lay + t - timestamp))
+    }
+  }
+
+  // 画障碍物
+  drawObstacle(cxt, top, left) {
+    let img = new Image();
+    // cxt.fillStyle = 'red';
+    // cxt.fillRect(left, top, 80, 80)
+    img.src = require('./img/lovers1.png')
+    img.onload = () => {
+      cxt.drawImage(img, left, top, 80, 80)
     }
   }
 
