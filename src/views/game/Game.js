@@ -115,11 +115,13 @@ class Game extends Component {
       this.drawObstacle(bgCtx, top + 200, 145)
       console.log(top, top2, surfaceHeight)
       // if (top2 > surfaceHeight) {
-      console.log(top + (-(surfaceHeight - top2)))
-      this.drawObstacle(bgCtx, top2, 265)
-      this.drawObstacle(bgCtx, top2, 25)
-      this.drawObstacle(bgCtx, top2, 265)
-      this.drawObstacle(bgCtx, top2, 145)
+      console.log(-(surfaceHeight - top2))
+      this.drawObstacle(bgCtx2,   -(surfaceHeight - top2), 265)
+      this.drawObstacle(bgCtx2,   -(surfaceHeight - top2), 25)
+      this.drawObstacle(bgCtx2,   -(surfaceHeight - top2) + 200, 265)
+      this.drawObstacle(bgCtx2,   -(surfaceHeight - top2) + 400, 25)
+      this.drawObstacle(bgCtx2,   -(surfaceHeight - top2) + 400, 265)
+      this.drawObstacle(bgCtx2,   -(surfaceHeight - top2) + 600, 145)
       // }
 
       // this.drawObstacle(bgCtx2, -(surfaceHeight - top), 50)
