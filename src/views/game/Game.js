@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import bgImg from './img/game_bg_top.png';
-import lovers from './img/lovers1.png';
+// import bgImg from './img/game_bg_top.png';
+// import lovers from './img/lovers1.png';
 
 require('./css/game.css')
 
@@ -12,6 +12,7 @@ class Game extends Component {
       pisitionName: 'center',
       index: 1, // 狗狗的帧动画,
       top: 0, // 背景高度
+      top2: 0, // 背景高度
       img: null
     }
     this.drawBg = this.drawBg.bind(this)
@@ -38,10 +39,11 @@ class Game extends Component {
   }
 
   render() {
-    let surfaceWidth = window.innerWidth;
-    let surfaceHeight = window.innerHeight;
+    // let surfaceWidth = window.innerWidth;
+    // let surfaceHeight = window.innerHeight;
     return (
       <div className="container">
+        {/* 创建两个canvas用来画背景 */}
         <div className="bg-container">
           <canvas
             className="canvas-container"
@@ -52,6 +54,7 @@ class Game extends Component {
             ref='canvasRef2'
           />
         </div>
+        {/* 这个是用来画狗的canvas */}
         <canvas
           width="75px"
           height="100px"
@@ -67,12 +70,16 @@ class Game extends Component {
   // 画背景
   // timestamp: 时间戳 elapsed: 已经过去的时间
   drawBg(timestamp = 0, elapsed = 1000 / 1 + 1) {
+    // 设置为全屏的宽高
     let surfaceWidth = window.innerWidth;
     let surfaceHeight = window.innerHeight;
     let top = this.state.top;
+    let top2 = this.state.top2
     let lay = elapsed;
+    // 当前背景的图片
     let img = this.state.img;
 
+    // 创建画背景图的canvas
     let bgC = this.refs.canvasRef
     bgC.width = surfaceWidth
     bgC.height = surfaceHeight
@@ -84,31 +91,48 @@ class Game extends Component {
     bgC2.height = surfaceHeight
     let bgCtx2 = bgC2.getContext("2d")
 
-
-    // let img = new Image()
-    // timer = setInterval(() => {
-    // img.src = require('./img/game_bg_top.png')
     if (lay > 1000 / 61) {
       if (top >= surfaceHeight) {
         // 这里清空这一屏幕的障碍物
-        top = 0;
-        this.setState({ top: 0 })
+        top = -surfaceHeight;
+        this.setState({ top: -surfaceHeight })
+      }
+      if (top2 > surfaceHeight * 2) {
+        top2 = 0
+        this.setState({ top2: 0 })
       }
       this.clear(bgCtx, surfaceWidth, surfaceHeight)
       this.clear(bgCtx2, surfaceWidth, surfaceHeight)
       bgCtx.fillStyle = '#000';
       bgCtx.fillRect(0, 0, surfaceWidth, surfaceHeight)
       bgCtx.drawImage(img, 0, top, surfaceWidth, surfaceHeight)
-      bgCtx2.drawImage(img, 0, -(surfaceHeight - top), surfaceWidth, surfaceHeight)
+      // 这里画第二屏的
+      bgCtx2.fillStyle = '#fff';
+      bgCtx2.fillRect(0, -(surfaceHeight - top2), surfaceWidth, surfaceHeight)
+      bgCtx2.drawImage(img, 0, -(surfaceHeight - top2), surfaceWidth, surfaceHeight)
       // 要在背景之后画障碍物--不然会被盖掉
-      this.drawObstacle(bgCtx, top, 50)
+      this.drawObstacle(bgCtx, top, 25)
+      this.drawObstacle(bgCtx, top + 200, 145)
+      console.log(top, top2, surfaceHeight)
+      // if (top2 > surfaceHeight) {
+      console.log(top + (-(surfaceHeight - top2)))
+      this.drawObstacle(bgCtx, top2, 265)
+      this.drawObstacle(bgCtx, top2, 25)
+      this.drawObstacle(bgCtx, top2, 265)
+      this.drawObstacle(bgCtx, top2, 145)
+      // }
+
       // this.drawObstacle(bgCtx2, -(surfaceHeight - top), 50)
       top++;
+      top2++
       lay = 0;
       this.setState({ top: top })
+      this.setState({ top2: top2 })
+    } else {
+      console.log(lay)
     }
-    requestAnimationFrame(t => this.drawBg(t, lay + t - timestamp))
-
+    // requestAnimationFrame(t => this.drawBg(t, lay + t - timestamp))
+    requestAnimationFrame(t => this.drawBg(t, 60))
     // this.clea(bgCtx, surfaceWidth, surfaceHeight)
   }
 
@@ -127,6 +151,7 @@ class Game extends Component {
       index++;
       this.setState({ index: index })
     }
+    // eslint-disable-next-line react/no-direct-mutation-state
     if (this.state.index === 6) this.state.index = 1;
     img.src = require('./img/dog/' + nowI + '.png')
     // 绘图
@@ -143,9 +168,9 @@ class Game extends Component {
     // cxt.fillStyle = 'red';
     // cxt.fillRect(left, top, 80, 80)
     img.src = require('./img/lovers1.png')
-    img.onload = () => {
-      cxt.drawImage(img, left, top, 80, 80)
-    }
+    // img.onload = () => {
+    cxt.drawImage(img, left, top, 80, 80)
+    // }
   }
 
   // 清空画布
