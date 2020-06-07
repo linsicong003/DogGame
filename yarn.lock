@@ -8725,9 +8725,10 @@ schema-utils@^2.0.0, schema-utils@^2.0.1:
     ajv "^6.10.2"
     ajv-keywords "^3.4.1"
 
-"scroller@git://github.com/mjohnston/scroller.git":
+"scroller@git://github.com/mjohnston/scroller":
   version "0.0.1"
-  resolved "git://github.com/mjohnston/scroller.git#054c3349d5ff7474589eb7fbbb36708e5c48e435"
+  uid "054c3349d5ff7474589eb7fbbb36708e5c48e435"
+  resolved "git://github.com/mjohnston/scroller#054c3349d5ff7474589eb7fbbb36708e5c48e435"
 
 select-hose@^2.0.0:
   version "2.0.0"
@@ -10023,9 +10024,9 @@ websocket-driver@>=0.5.1:
     websocket-extensions ">=0.1.1"
 
 websocket-extensions@>=0.1.1:
-  version "0.1.3"
-  resolved "https://registry.npm.taobao.org/websocket-extensions/download/websocket-extensions-0.1.3.tgz#5d2ff22977003ec687a4b87073dfbbac146ccf29"
-  integrity sha1-XS/yKXcAPsaHpLhwc9+7rBRszyk=
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/websocket-extensions/-/websocket-extensions-0.1.4.tgz#7f8473bc839dfd87608adb95d7eb075211578a42"
+  integrity sha512-OqedPIGOfsDlo31UNwYbCFMSaO9m9G/0faIHj5/dZFDMFqPTcx6UwqyOy3COEaEOg/9VsGIpdqn62W5KhoKSpg==
 
 whatwg-encoding@^1.0.1, whatwg-encoding@^1.0.3, whatwg-encoding@^1.0.5:
   version "1.0.5"
